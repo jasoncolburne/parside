@@ -18,12 +18,13 @@ clean:
 	cargo clean
 
 fix:
-	cargo fix
 	cargo fmt
+	cargo clippy --fix --no-deps
+	cargo fix
 
 preflight:
 	cargo fmt --check
-	cargo clippy -- -D warnings
+	cargo clippy --no-deps -- -D warnings
 	cargo build --release
 	cargo test --release
 	cargo audit
