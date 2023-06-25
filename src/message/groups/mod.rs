@@ -7,6 +7,7 @@ pub mod pathed_material_quadlets;
 pub mod sad_path_sig;
 pub mod sad_path_sig_group;
 pub mod seal_source_couples;
+pub mod seal_source_triples;
 pub mod trans_idx_sig_groups;
 pub mod trans_last_idx_sig_groups;
 pub mod trans_receipt_quadruples;
@@ -25,6 +26,7 @@ pub use self::pathed_material_quadlets::{PathedMaterialQuadlet, PathedMaterialQu
 pub use self::sad_path_sig::{SadPathSig, SadPathSigs};
 pub use self::sad_path_sig_group::{SadPathSigGroup, SadPathSigGroups};
 pub use self::seal_source_couples::{SealSourceCouple, SealSourceCouples};
+pub use self::seal_source_triples::{SealSourceTriple, SealSourceTriples};
 pub use self::trans_idx_sig_groups::{TransIdxSigGroup, TransIdxSigGroups};
 pub use self::trans_last_idx_sig_groups::{TransLastIdxSigGroup, TransLastIdxSigGroups};
 pub use self::trans_receipt_quadruples::{TransReceiptQuadruple, TransReceiptQuadruples};
@@ -42,6 +44,7 @@ pub enum CesrGroup {
     FirstSeenReplayCouplesVariant { value: FirstSeenReplayCouples },
     SealSourceCouplesVariant { value: SealSourceCouples },
     AttachedMaterialQuadletsVariant { value: AttachedMaterialQuadlets },
+    SealSourceTriplesVariant { value: SealSourceTriples },
     SadPathSigGroupVariant { value: SadPathSigGroups },
     SadPathSigVariant { value: SadPathSigs },
     PathedMaterialQuadletsVariant { value: PathedMaterialQuadlets },
@@ -100,6 +103,11 @@ impl CesrGroup {
                 let (rest, group) =
                     SealSourceCouples::from_stream_bytes(rest, &counter, &cold_code)?;
                 Ok((rest, CesrGroup::SealSourceCouplesVariant { value: group }))
+            }
+            SealSourceTriples::CODE => {
+                let (rest, group) =
+                    SealSourceTriples::from_stream_bytes(rest, &counter, &cold_code)?;
+                Ok((rest, CesrGroup::SealSourceTriplesVariant { value: group }))
             }
             SadPathSigGroups::CODE => {
                 let (rest, group) =
