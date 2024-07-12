@@ -31,11 +31,17 @@ impl SealSourceTriples {
         cold_code: &ColdCode,
     ) -> ParsideResult<(&'a [u8], SealSourceTriples)> {
         let (rest, body) = count(
-            tuple((Parsers::prefixer_parser(cold_code)?, Parsers::seqner_parser(cold_code)?, Parsers::saider_parser(cold_code)?)),
+            tuple((
+                Parsers::prefixer_parser(cold_code)?,
+                Parsers::seqner_parser(cold_code)?,
+                Parsers::saider_parser(cold_code)?,
+            )),
             counter.count() as usize,
         )(bytes)?;
-        let body =
-            body.into_iter().map(|(prefixer, seqner, saider)| SealSourceTriple { prefixer, seqner, saider }).collect();
+        let body = body
+            .into_iter()
+            .map(|(prefixer, seqner, saider)| SealSourceTriple { prefixer, seqner, saider })
+            .collect();
 
         Ok((rest, SealSourceTriples { value: body }))
     }
@@ -92,7 +98,8 @@ impl GroupItem for SealSourceTriple {
     }
 
     fn full_size(&self) -> ParsideResult<usize> {
-        let size = self.prefixer.full_size()? + self.seqner.full_size()? + self.saider.full_size()?;
+        let size =
+            self.prefixer.full_size()? + self.seqner.full_size()? + self.saider.full_size()?;
         Ok(size)
     }
 }
